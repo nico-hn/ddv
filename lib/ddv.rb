@@ -9,8 +9,7 @@ def tree(parent_dir, level=0)
     if File.directory?(File.join(parent_dir, node))
       tree(File.join(parent_dir, node), level + 1)
     else
-      print "  " * level + "  *"
-      puts node
+      print_file(node, level)
     end
   end
 end
@@ -18,6 +17,11 @@ end
 def print_dir(dir, level)
   print "  " * level
   puts "[#{dir}]"
+end
+
+def print_file(file, level)
+  print "  " * level + "  *"
+  puts file
 end
 
 tree("test")
