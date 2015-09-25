@@ -3,8 +3,7 @@
 require 'fileutils'
 
 def tree(parent_dir, level=0)
-  print "  " * level
-  puts "[#{File.basename(parent_dir)}]"
+  print_dir(File.basename(parent_dir), level)
   Dir.entries(parent_dir).each do |node|
     next if [".", ".."].include? node
     if File.directory?(File.join(parent_dir, node))
@@ -14,6 +13,11 @@ def tree(parent_dir, level=0)
       puts node
     end
   end
+end
+
+def print_dir(dir, level)
+  print "  " * level
+  puts "[#{dir}]"
 end
 
 tree("test")
