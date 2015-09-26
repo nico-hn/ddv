@@ -5,13 +5,10 @@ require 'fileutils'
 def tree(parent_dir, level=0)
   print_dir(File.basename(parent_dir), level)
   nodes = Dir.entries(parent_dir) - [".", ".."]
-  sort_by_node_type(nodes, parent_dir).each do |node|
-    if dir?(parent_dir, node)
-      tree(File.join(parent_dir, node), level + 1)
-    else
-      print_file(node, level)
-    end
-  end
+  dirs = nodes.select {|n| dir?(parent_dir, n) }.sort {|x, y| x <=> y }
+  files = (nodes - dirs).sort {|x, y| x <=> y }
+  files.each {|file| print_file(file, level) }
+  dirs.each {|dir| tree(File.join(parent_dir, dir), level + 1) }
 end
 
 def dir?(parent_dir, node)
