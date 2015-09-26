@@ -1,0 +1,13 @@
+[data]
+  * index.html
+  [aves]
+    * index.html
+    [can_fly]
+      * sparrow.txt
+    [cannot_fly] => 4 files
+  [mammalia]
+    * index.html
+    [can_fly]
+      * bat.txt
+    [cannot_fly]
+      * .gitkeep
