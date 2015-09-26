@@ -10,11 +10,11 @@ module Ddv
     end
 
     def tree(parent_dir, max_detailed_files_num=nil, level=0)
-      @output.print_dir(File.basename(parent_dir), level)
+      @output.output_dir(File.basename(parent_dir), level)
       nodes = Dir.entries(parent_dir) - [".", ".."]
       dirs = nodes.select {|n| dir?(parent_dir, n) }.sort
       files = (nodes - dirs).sort
-      @output.print_files(files, max_detailed_files_num, level)
+      @output.output_files(files, max_detailed_files_num, level)
       dirs.each do |dir|
         tree(File.join(parent_dir, dir), max_detailed_files_num, level + 1)
       end
@@ -26,25 +26,25 @@ module Ddv
   end
 
   class NodePrinter
-    def print_files(files, max_detailed_files_num, level)
+    def output_files(files, max_detailed_files_num, level)
       if max_detailed_files_num and files.size > max_detailed_files_num
-        print_files_summary(files)
+        output_files_summary(files)
       else
         puts
-        files.each {|file| print_file(file, level) }
+        files.each {|file| output_file(file, level) }
       end
     end
     
-    def print_files_summary(files)
+    def output_files_summary(files)
       puts " => #{files.size} files"
     end
     
-    def print_dir(dir, level)
+    def output_dir(dir, level)
       print "  " * level
       print "[#{dir}]"
     end
     
-    def print_file(file, level)
+    def output_file(file, level)
       print "  " * level + "  * "
       puts file
     end
