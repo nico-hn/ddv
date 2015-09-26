@@ -12,8 +12,7 @@ module Ddv
     def tree(parent_dir, max_detailed_files_num=nil, level=0)
       @output.output_dir(File.basename(parent_dir), level)
       nodes = Dir.entries(parent_dir) - [".", ".."]
-      dirs = nodes.select {|n| dir?(parent_dir, n) }.sort
-      files = (nodes - dirs).sort
+      dirs, files = nodes.partition {|n| dir?(parent_dir, n) }.map(&:sort)
       @output.output_files(files, max_detailed_files_num, level)
       dirs.each do |dir|
         tree(File.join(parent_dir, dir), max_detailed_files_num, level + 1)
