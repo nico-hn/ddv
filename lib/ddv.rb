@@ -13,7 +13,9 @@ def tree(parent_dir, max_detailed_files_num=nil, level=0)
     puts
     files.each {|file| print_file(file, level) }
   end
-  dirs.each {|dir| tree(File.join(parent_dir, dir), max_detailed_files_num, level + 1) }
+  dirs.each do |dir|
+    tree(File.join(parent_dir, dir), max_detailed_files_num, level + 1)
+  end
 end
 
 def dir?(parent_dir, node)
