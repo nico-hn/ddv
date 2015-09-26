@@ -45,4 +45,6 @@ module Ddv
   end
 end
 
-Ddv::DirVisitor.new.tree("test")
+if $0 == __FILE__
+  Ddv::DirVisitor.new.tree(ARGV[0])
+end
