@@ -4,7 +4,8 @@ require 'fileutils'
 
 def tree(parent_dir, level=0)
   print_dir(File.basename(parent_dir), level)
-  Dir.entries(parent_dir).each do |node|
+  nodes = Dir.entries(parent_dir)
+  sort_by_node_type(nodes, parent_dir).each do |node|
     next if [".", ".."].include? node
     if dir?(parent_dir, node)
       tree(File.join(parent_dir, node), level + 1)
@@ -16,6 +17,16 @@ end
 
 def dir?(parent_dir, node)
   File.directory?(File.join(parent_dir, node))
+end
+
+def dir_file_order(parent_dir, node)
+  dir?(parent_dir, node) ? 1 : 0
+end
+
+def sort_by_node_type(nodes, parent_dir)
+  nodes.map {|n| [dir_file_order(parent_dir, n), n] }.
+    sort {|x, y| x <=> y }.
+    map {|n| n[1] }
 end
 
 def print_dir(dir, level)
