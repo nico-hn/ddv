@@ -5,8 +5,8 @@ require 'fileutils'
 def tree(parent_dir, max_detailed_files_num=nil, level=0)
   print_dir(File.basename(parent_dir), level)
   nodes = Dir.entries(parent_dir) - [".", ".."]
-  dirs = nodes.select {|n| dir?(parent_dir, n) }.sort {|x, y| x <=> y }
-  files = (nodes - dirs).sort {|x, y| x <=> y }
+  dirs = nodes.select {|n| dir?(parent_dir, n) }.sort
+  files = (nodes - dirs).sort
   if max_detailed_files_num and files.size > max_detailed_files_num
     print_files_summary(files)
   else
