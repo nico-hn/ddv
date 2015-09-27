@@ -4,7 +4,7 @@
     * index.html
     [can_fly]
       * sparrow.txt
-    [cannot_fly] => 4 files
+    [cannot_fly] => jpg: 2 files / txt: 2 files
   [mammalia]
     * index.html
     [can_fly]

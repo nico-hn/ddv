@@ -35,7 +35,7 @@ module Ddv
     end
     
     def output_files_summary(files)
-      puts " => #{files.size} files"
+      puts " => #{report_file_types(files)}"
     end
     
     def output_dir(dir, level)
@@ -46,6 +46,30 @@ module Ddv
     def output_file(file, level)
       print "  " * level + "  * "
       puts file
+    end
+
+    def report_file_types(files)
+      format_counter(count_by_file_type(files))
+    end
+
+    private
+
+    def count_by_file_type(files)
+      counter = Hash.new(0)
+      files.each do |file|
+        m = /\.([^.]+)\Z/.match(file)
+        counter["others"] += 1 unless m
+        counter[m[1]] += 1
+      end
+      counter
+    end
+
+    def format_counter(counter)
+      counter.map do |entry|
+        type, count = entry
+        plural = count == 1 ? "" : "s"
+        format("%s: %d file%s", type, count, plural)
+      end.join(" / ")
     end
   end
 end
