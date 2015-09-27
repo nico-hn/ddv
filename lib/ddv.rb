@@ -57,9 +57,9 @@ module Ddv
     def count_by_file_type(files)
       counter = Hash.new(0)
       files.each do |file|
-        m = /\.([^.]+)\Z/.match(file)
-        counter["others"] += 1 unless m
-        counter[m[1]] += 1
+        m = /\.([^.]+)\Z/.match(file) # extract file extention
+        ext = m ? m[1] : "others"
+        counter[ext] += 1
       end
       counter
     end
