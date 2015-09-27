@@ -2,8 +2,39 @@
 
 require "ddv/version"
 require 'fileutils'
+require 'optparse'
 
 module Ddv
+  def self.parse_command_line_options
+    options = {}
+    OptionParser.new("USAGE: #{File.basename($0)} [OPTION]... [DIRECTORY]
+List recursively all files/directories in a directory.") do |opt|
+      opt.on("-m [max_number_of_files_to_list]",
+             "--max-files-to-list [=max_number_of_files_to_list]",
+             "Specify the maximum number of file names to be listed.") do |n|
+        options[:max_detailed_files_num] = n.to_i
+      end
+
+      opt.on("-i", "--ignore_file_types",
+             "Ignore file types when counting files in a directory.") do |i|
+        options[:ignore_file_type] = i
+      end
+
+      opt.parse!
+    end
+    options
+  end
+
+  private_class_method :parse_command_line_options
+
+  def self.execute
+    options = parse_command_line_options
+    printer = NodePrinter.new(options[:max_detailed_files_num],
+                              options[:ignore_file_type])
+    directory = ARGV[0] || "."
+    DirVisitor.new(printer).tree(directory)
+  end
+
   class DirVisitor
     def initialize(output=NodePrinter.new)
       @output = output
@@ -84,5 +115,5 @@ module Ddv
 end
 
 if $0 == __FILE__
-  Ddv::DirVisitor.new.tree(ARGV[0])
+  Ddv.execute
 end
