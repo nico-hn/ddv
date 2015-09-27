@@ -1,8 +1,8 @@
 # Ddv
 
-TODO: Write a gem description
+Ddv is a recursive directory listing command with very limited functionality.
 
-## Installation
+## Installation (not published to RubyGems.org yet)
 
 Add this line to your application's Gemfile:
 
@@ -18,7 +18,31 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+execute:
+
+    ddv [top_directory_name_to_list]
+
+For example:
+
+    $ ddv data
+    [data]
+      * README
+      * index.html
+      [aves]
+        * index.html
+        [can_fly]
+          * sparrow.txt
+        [cannot_fly]
+          * ostrich.jpg
+          * ostrich.txt
+          * penguin.jpg
+          * penguin.txt
+      [mammalia]
+        * index.html
+        [can_fly]
+          * bat.txt
+        [cannot_fly]
+
 
 ## Contributing
 
