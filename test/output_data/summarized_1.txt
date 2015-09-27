@@ -1,0 +1,12 @@
+[data] => others: 1 file / html: 1 file
+  [aves]
+    * index.html
+    [can_fly]
+      * sparrow.txt
+    [cannot_fly] => jpg: 2 files / txt: 2 files
+  [mammalia]
+    * index.html
+    [can_fly]
+      * bat.txt
+    [cannot_fly]
+      * .gitkeep

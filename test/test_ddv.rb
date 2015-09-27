@@ -16,6 +16,11 @@ class TestDdv < MiniTest::Unit::TestCase
     assert_output(expected_output) { Ddv::DirVisitor.new.tree("test/data") }
   end
 
+  def test_summarized_1_output
+    expected_output = File.read(in_cur_dir("output_data/summarized_1.txt"))
+    assert_output(expected_output) { Ddv::DirVisitor.new.tree("test/data", 1) }
+  end
+
   def test_summarized_2_output
     expected_output = File.read(in_cur_dir("output_data/summarized_2.txt"))
     assert_output(expected_output) { Ddv::DirVisitor.new.tree("test/data", 2) }
