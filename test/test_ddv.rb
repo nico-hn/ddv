@@ -25,3 +25,17 @@ class TestDdv < MiniTest::Unit::TestCase
     assert_output(expected_output) { Ddv::DirVisitor.new(Ddv::NodePrinter.new(2)).tree("test/data") }
   end
 end
+
+class TestNodePrinter < MiniTest::Unit::TestCase
+  def test_output_files_summary
+    files = %w(README penguin.txt index.html ostrich.txt penguin.jpg)
+    expected_default_result = " => others: 1 file / txt: 2 files / html: 1 file / jpg: 1 file\n"
+    expected_file_type_ignored_result = " => 5 files\n"
+    assert_output(expected_default_result) do
+      Ddv::NodePrinter.new(2).output_files_summary(files)
+    end
+    assert_output(expected_file_type_ignored_result) do
+      Ddv::NodePrinter.new(2, true).output_files_summary(files)
+    end
+  end
+end

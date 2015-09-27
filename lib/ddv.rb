@@ -25,8 +25,9 @@ module Ddv
   end
 
   class NodePrinter
-    def initialize(max_detailed_files_num=nil)
+    def initialize(max_detailed_files_num=nil, ignore_file_type=false)
       @max_detailed_files_num = max_detailed_files_num
+      @ignore_file_type = ignore_file_type
     end
 
     def output_files(files, level)
@@ -39,7 +40,11 @@ module Ddv
     end
     
     def output_files_summary(files)
-      puts " => #{report_file_types(files)}"
+      if @ignore_file_type
+        puts " => #{files.size} files"
+      else
+        puts " => #{report_file_types(files)}"
+      end
     end
     
     def output_dir(dir, level)
