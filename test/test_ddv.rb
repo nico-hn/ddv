@@ -1,7 +1,6 @@
 require 'minitest_helper'
 
 class TestDdv < MiniTest::Unit::TestCase
-
   def in_cur_dir(filename)
     @cur_dir ||= File.dirname(File.expand_path(__FILE__))
     File.join(@cur_dir, filename)
