@@ -25,8 +25,12 @@ module Ddv
   end
 
   class NodePrinter
+    def initialize(max_detailed_files_num=nil)
+      @max_detailed_files_num = max_detailed_files_num
+    end
+
     def output_files(files, max_detailed_files_num, level)
-      if max_detailed_files_num and files.size > max_detailed_files_num
+      if @max_detailed_files_num and files.size > @max_detailed_files_num
         output_files_summary(files)
       else
         puts
