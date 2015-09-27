@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Ddv::VERSION
   spec.authors       = ["HASHIMOTO, Naoki"]
   spec.email         = ["hashimoto.naoki@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+#  spec.description   = %q{TODO: Write a gem description}
+  spec.summary       = %q{Ddv is a recursive directory listing command with very limited functionality.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
