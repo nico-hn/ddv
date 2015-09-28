@@ -70,17 +70,17 @@ List recursively all files/directories in a directory.") do |opt|
       end
     end
     
+    def output_dir(dir, level)
+      print "  " * level
+      print "[#{dir}]"
+    end
+
     def output_files_summary(files)
       if @ignore_file_type
         puts " => #{files.size} files"
       else
         puts " => #{report_file_types(files)}"
       end
-    end
-    
-    def output_dir(dir, level)
-      print "  " * level
-      print "[#{dir}]"
     end
     
     def output_file(file, level)
