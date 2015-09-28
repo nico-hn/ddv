@@ -4,7 +4,7 @@ class TestDdv < MiniTest::Unit::TestCase
   big_file = "test/data/mammalia/cannot_fly/elephant.txt"
   unless File.exist?(big_file)
     open(big_file, "w") do |file|
-      file.print "0" * 10_000_000
+      file.print "0" * 15_555_555
     end
   end
 
