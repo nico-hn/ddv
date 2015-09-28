@@ -20,6 +20,12 @@ List recursively all files/directories in a directory.") do |opt|
         options[:ignore_file_type] = i
       end
 
+      opt.on("-s [minimum_file_size]",
+             "--minimum-file-size [=minimum_file_size]",
+             "Specify the minimun size of files to report") do |size|
+        options[:minimum_file_size] = size.to_i
+      end
+
       opt.parse!
     end
     options
@@ -29,7 +35,10 @@ List recursively all files/directories in a directory.") do |opt|
 
   def self.execute
     options = parse_command_line_options
-    printer = NodePrinter.new(options[:max_detailed_files_num],
+    if file_size = options[:minimum_file_size]
+      printer = FileSizeChecker.new(file_size)
+    end
+    printer ||= NodePrinter.new(options[:max_detailed_files_num],
                               options[:ignore_file_type])
     directory = ARGV[0] || "."
     DirVisitor.new(printer).tree(directory)
