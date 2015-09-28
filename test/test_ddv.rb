@@ -1,6 +1,13 @@
 require 'minitest_helper'
 
 class TestDdv < MiniTest::Unit::TestCase
+  big_file = "test/data/mammalia/cannot_fly/elephant.txt"
+  unless File.exist?(big_file)
+    open(big_file, "w") do |file|
+      file.print "0" * 10_000_000
+    end
+  end
+
   def in_cur_dir(filename)
     @cur_dir ||= File.dirname(File.expand_path(__FILE__))
     File.join(@cur_dir, filename)

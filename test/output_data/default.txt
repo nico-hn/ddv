@@ -15,4 +15,4 @@
     [can_fly]
       * bat.txt
     [cannot_fly]
-      * .gitkeep
+      * elephant.txt
