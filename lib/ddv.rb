@@ -83,6 +83,8 @@ List recursively all files/directories in a directory.") do |opt|
       end
     end
     
+    private
+
     def output_file(file, level)
       print "  " * level + "  * "
       puts file
@@ -91,8 +93,6 @@ List recursively all files/directories in a directory.") do |opt|
     def report_file_types(files)
       format_counter(count_by_file_type(files))
     end
-
-    private
 
     def count_by_file_type(files)
       counter = Hash.new(0)
