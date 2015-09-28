@@ -1,16 +1,20 @@
 require 'minitest_helper'
 
+module Helpers
+  def in_cur_dir(filename)
+    @cur_dir ||= File.dirname(File.expand_path(__FILE__))
+    File.join(@cur_dir, filename)
+  end
+end
+
 class TestDdv < MiniTest::Unit::TestCase
+  include Helpers
+
   big_file = "test/data/mammalia/cannot_fly/elephant.txt"
   unless File.exist?(big_file)
     open(big_file, "w") do |file|
       file.print "0" * 15_555_555
     end
-  end
-
-  def in_cur_dir(filename)
-    @cur_dir ||= File.dirname(File.expand_path(__FILE__))
-    File.join(@cur_dir, filename)
   end
 
   def test_that_it_has_a_version_number
@@ -48,10 +52,7 @@ class TestNodePrinter < MiniTest::Unit::TestCase
 end
 
 class TestFileSizeChecker < MiniTest::Unit::TestCase
-  def in_cur_dir(filename)
-    @cur_dir ||= File.dirname(File.expand_path(__FILE__))
-    File.join(@cur_dir, filename)
-  end
+  include Helpers
 
   def test_summarized_2_output
     expected_output = File.read(in_cur_dir("output_data/minimum_10000_bytes.txt"))
