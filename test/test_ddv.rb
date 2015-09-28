@@ -46,3 +46,15 @@ class TestNodePrinter < MiniTest::Unit::TestCase
     end
   end
 end
+
+class TestFileSizeChecker < MiniTest::Unit::TestCase
+  def in_cur_dir(filename)
+    @cur_dir ||= File.dirname(File.expand_path(__FILE__))
+    File.join(@cur_dir, filename)
+  end
+
+  def test_summarized_2_output
+    expected_output = File.read(in_cur_dir("output_data/minimum_10000_bytes.txt"))
+    assert_output(expected_output) { Ddv::DirVisitor.new(Ddv::FileSizeChecker.new(10_000)).tree("test/data") }
+  end
+end

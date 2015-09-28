@@ -112,6 +112,53 @@ List recursively all files/directories in a directory.") do |opt|
       end.join(" / ")
     end
   end
+
+  class FileSizeChecker < NodePrinter
+    def initialize(minimum_size=0, maximum_size=nil)
+      @units = { "B" => 1, "KB" => 1000, "MB" => 1000_000 }
+      if maximum_size and maximum_size < minimum_size
+        @minimum_size, @maximum_size = maximum_size, minimum_size
+      else
+        @minimum_size, @maximum_size = minimum_size, maximum_size
+      end
+    end
+
+    def output_files(files, level, parent_dir)
+      files_with_size = select_files(parent_dir, files)
+      puts
+      files_with_size.each do |file, size|
+        output_file(file, level, size)
+      end
+    end
+
+    private
+
+    def file_size(parent_dir, file)
+      File.size(File.join(parent_dir, file))
+    end
+
+    def select_files(parent_dir, files)
+      files_with_size = files.map {|file| [file, file_size(parent_dir, file)] }
+      smaller_removed = files_with_size.select {|f| f[1] >= @minimum_size }
+      if @maximum_size
+        smaller_removed.select {|f| f[1] <= @maximum_size }
+      else
+        smaller_removed
+      end
+    end
+
+    def size_with_unit(size)
+      return format("%dB", size) if size < 1000
+      unit = size < 1000_000 ? "KB" : "MB"
+      format("%.2f%s", size.to_f / @units[unit], unit)
+    end
+
+    def output_file(file, level, size)
+      print "  " * level + "  * "
+      print file
+      puts " -> " + size_with_unit(size)
+    end
+  end
 end
 
 if $0 == __FILE__
