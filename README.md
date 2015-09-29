@@ -18,7 +18,7 @@ Or install it yourself as:
 
 ## Usage
 
-execute:
+Execute:
 
     ddv [top_directory_name_to_list]
 
