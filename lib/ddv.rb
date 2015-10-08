@@ -189,8 +189,9 @@ List recursively all files/directories in a directory.") do |opt|
       htmls = files.select {|file| /.html?$/ =~ file }
       htmls.each do |html|
         html_doc = read_html(parent_dir, html)
-        report_pdf_links(parent_dir, html, html_doc)
-        report_non_conformant_pdf_links(parent_dir, html, html_doc)
+        pdf_links = select_pdf_links(parent_dir, html, html_doc)
+        report_pdf_links(pdf_links)
+        report_non_conformant_pdf_links(pdf_links)
       end
     end
 
@@ -209,14 +210,14 @@ List recursively all files/directories in a directory.") do |opt|
       pdf_links
     end
 
-    def report_pdf_links(parent_dir, html, html_doc)
-      select_pdf_links(parent_dir, html, html_doc).each do |a|
+    def report_pdf_links(pdf_links)
+      pdf_links.each do |a|
         puts a.children.to_s
       end
     end
 
-    def report_non_conformant_pdf_links(parent_dir, html, html_doc)
-      select_pdf_links(parent_dir, html, html_doc).select do |a|
+    def report_non_conformant_pdf_links(pdf_links)
+      pdf_links.select do |a|
         PDF_SIZE_RE !~ a.children.to_s.chomp
       end.each do |a|
         puts format("==The size is not indicated: %s", a.children.to_s)
