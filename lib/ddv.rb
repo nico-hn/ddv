@@ -33,6 +33,12 @@ List recursively all files/directories in a directory.") do |opt|
         options[:link_check] = true if should_check_links
       end
 
+      opt.on("-d [domain_name]",
+             "--domain [domain_name]",
+             "Specify the domain name") do |domain_name|
+        options[:domain_name] = domain_name
+      end
+
       opt.parse!
     end
     options
@@ -53,7 +59,7 @@ List recursively all files/directories in a directory.") do |opt|
     if options[:link_check]
       puts
       puts "---- Check pdf links:"
-      DirVisitor.new(LinkChecker.new).tree(directory)
+      DirVisitor.new(LinkChecker.new(options[:domain_name])).tree(directory)
     end
   end
 
@@ -185,6 +191,10 @@ List recursively all files/directories in a directory.") do |opt|
   class LinkChecker < NodePrinter
     PDF_SIZE_RE = /\[PDF +[1-9][0-9,]*[KM]?B\]/i
 
+    def initialize(domain_name)
+      @domain_name_re = compile_domain_name_re(domain_name)
+    end
+
     def output_files(files, level, parent_dir)
       htmls = files.select {|file| /.html?$/ =~ file }
       htmls.each do |html|
@@ -192,10 +202,21 @@ List recursively all files/directories in a directory.") do |opt|
         pdf_links = select_pdf_links(parent_dir, html, html_doc)
         report_pdf_links(pdf_links)
         report_non_conformant_pdf_links(pdf_links)
+        report_external_links(parent_dir, html, html_doc.xpath("//a"))
       end
     end
 
     private
+
+    def compile_domain_name_re(domain_name)
+      return unless domain_name
+      domain_name = Regexp.escape(domain_name)
+      if domain_name.start_with?("http://", "https://")
+        Regexp.compile(domain_name.sub(/https?:\/\//, "https?:\/\/"))
+      else
+        /https?:\/\/#{domain_name}/
+      end
+    end
 
     def read_html(parent_dir, html)
       Nokogiri::HTML(File.read(File.join(parent_dir, html)))
@@ -206,7 +227,7 @@ List recursively all files/directories in a directory.") do |opt|
       return pdf_links if pdf_links.empty?
       puts
       puts
-      puts "-- In #{File.join(parent_dir, html)}:"
+      puts "---- In #{File.join(parent_dir, html)}:"
       pdf_links
     end
 
@@ -221,6 +242,23 @@ List recursively all files/directories in a directory.") do |opt|
         PDF_SIZE_RE !~ a.children.to_s.chomp
       end.each do |a|
         puts format("==The size is not indicated: %s", a.children.to_s)
+      end
+    end
+
+    def external_url?(url)
+      return unless @domain_name_re
+      return unless url
+      url.start_with?("http://", "https://") and @domain_name_re !~ url
+    end
+
+    def report_external_links(parent_dir, html, links)
+      external_links = links.select {|a| external_url?(a["href"]) }
+      unless external_links.empty?
+        puts
+        puts "==External links in #{File.join(parent_dir, html)}:"
+      end
+      external_links.each do |a|
+        puts format("  %s | %s", a.children.to_s, a["href"])
       end
     end
   end
