@@ -203,6 +203,7 @@ List recursively all files/directories in a directory.") do |opt|
         report_pdf_links(pdf_links)
         report_non_conformant_pdf_links(pdf_links)
         report_external_links(parent_dir, html, html_doc.xpath("//a"))
+        report_title(parent_dir, html, html_doc)
       end
     end
 
@@ -262,6 +263,21 @@ List recursively all files/directories in a directory.") do |opt|
       end
       external_links.each do |a|
         puts format("  %s | %s", a.children.to_s, a["href"])
+      end
+    end
+
+    def report_title(parent_dir, html, html_doc)
+      titles = html_doc.xpath("//title")
+      h1 = html_doc.xpath("//h1")
+      unless titles.empty?
+        puts
+        puts "== Title in #{File.join(parent_dir, html)}:"
+      end
+      titles.each do |title|
+        puts title.children
+      end
+      h1.each do |h1|
+        puts h1
       end
     end
   end
