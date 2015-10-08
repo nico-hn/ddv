@@ -197,13 +197,19 @@ List recursively all files/directories in a directory.") do |opt|
       Nokogiri::HTML(File.read(File.join(parent_dir, html)))
     end
 
-    def report_pdf_links(parent_dir, html, html_doc)
+    def select_pdf_links(parent_dir, html, html_doc)
       pdf_links = html_doc.xpath("//a").select {|a| /.pdf$/i =~ a["href"] }
-      return if pdf_links.empty?
+      return pdf_links if pdf_links.empty?
       puts
       puts
       puts "-- In #{File.join(parent_dir, html)}:"
-      pdf_links.each {|a| puts a.children.to_s }
+      pdf_links
+    end
+
+    def report_pdf_links(parent_dir, html, html_doc)
+      select_pdf_links(parent_dir, html, html_doc).each do |a|
+        puts a.children.to_s
+      end
     end
   end
 end
