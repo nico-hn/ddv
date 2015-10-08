@@ -58,7 +58,7 @@ List recursively all files/directories in a directory.") do |opt|
 
     if options[:link_check]
       puts
-      puts "---- Check pdf links:"
+      puts "==== Check links:"
       DirVisitor.new(LinkChecker.new(options[:domain_name])).tree(directory)
     end
   end
