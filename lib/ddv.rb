@@ -206,6 +206,9 @@ List recursively all files/directories in a directory.") do |opt|
       end
     end
 
+    def output_dir(dir, level, parent_dir)
+    end
+
     private
 
     def compile_domain_name_re(domain_name)
