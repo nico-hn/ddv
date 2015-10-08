@@ -2,6 +2,7 @@
 
 require "ddv/version"
 require 'fileutils'
+require 'nokogiri'
 require 'optparse'
 
 module Ddv
@@ -26,6 +27,12 @@ List recursively all files/directories in a directory.") do |opt|
         options[:minimum_file_size] = size.to_i
       end
 
+      opt.on("-l",
+             "--link-check",
+             "Check links in HTML files.") do |should_check_links|
+        options[:link_check] = true if should_check_links
+      end
+
       opt.parse!
     end
     options
@@ -42,6 +49,12 @@ List recursively all files/directories in a directory.") do |opt|
                               options[:ignore_file_type])
     directory = ARGV[0] || "."
     DirVisitor.new(printer).tree(directory)
+
+    if options[:link_check]
+      puts
+      puts "---- Check pdf links:"
+      DirVisitor.new(LinkChecker.new).tree(directory)
+    end
   end
 
   class DirVisitor
@@ -166,6 +179,31 @@ List recursively all files/directories in a directory.") do |opt|
       print "  " * level + "  * "
       print file
       puts " -> " + size_with_unit(size)
+    end
+  end
+
+  class LinkChecker < NodePrinter
+    def output_files(files, level, parent_dir)
+      htmls = files.select {|file| /.html?$/ =~ file }
+      htmls.each do |html|
+        html_doc = read_html(parent_dir, html)
+        report_pdf_links(parent_dir, html, html_doc)
+      end
+    end
+
+    private
+
+    def read_html(parent_dir, html)
+      Nokogiri::HTML(File.read(File.join(parent_dir, html)))
+    end
+
+    def report_pdf_links(parent_dir, html, html_doc)
+      pdf_links = html_doc.xpath("//a").select {|a| /.pdf$/i =~ a["href"] }
+      return if pdf_links.empty?
+      puts
+      puts
+      puts "-- In #{File.join(parent_dir, html)}:"
+      pdf_links.each {|a| puts a.children.to_s }
     end
   end
 end
