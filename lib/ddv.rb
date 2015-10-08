@@ -230,7 +230,7 @@ List recursively all files/directories in a directory.") do |opt|
       return pdf_links if pdf_links.empty?
       puts
       puts
-      puts "---- In #{File.join(parent_dir, html)}:"
+      puts "-- Pdfs in #{File.join(parent_dir, html)}:"
       pdf_links
     end
 
@@ -244,7 +244,7 @@ List recursively all files/directories in a directory.") do |opt|
       pdf_links.select do |a|
         PDF_SIZE_RE !~ a.children.to_s.chomp
       end.each do |a|
-        puts format("==The size is not indicated: %s", a.children.to_s)
+        puts format("|| The size is not indicated: %s", a.children.to_s)
       end
     end
 
@@ -258,7 +258,7 @@ List recursively all files/directories in a directory.") do |opt|
       external_links = links.select {|a| external_url?(a["href"]) }
       unless external_links.empty?
         puts
-        puts "==External links in #{File.join(parent_dir, html)}:"
+        puts "== External links in #{File.join(parent_dir, html)}:"
       end
       external_links.each do |a|
         puts format("  %s | %s", a.children.to_s, a["href"])
