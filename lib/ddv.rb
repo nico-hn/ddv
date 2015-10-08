@@ -183,11 +183,14 @@ List recursively all files/directories in a directory.") do |opt|
   end
 
   class LinkChecker < NodePrinter
+    PDF_SIZE_RE = /\[PDF +[1-9][0-9,]*[KM]?B\]/i
+
     def output_files(files, level, parent_dir)
       htmls = files.select {|file| /.html?$/ =~ file }
       htmls.each do |html|
         html_doc = read_html(parent_dir, html)
         report_pdf_links(parent_dir, html, html_doc)
+        report_non_conformant_pdf_links(parent_dir, html, html_doc)
       end
     end
 
@@ -209,6 +212,14 @@ List recursively all files/directories in a directory.") do |opt|
     def report_pdf_links(parent_dir, html, html_doc)
       select_pdf_links(parent_dir, html, html_doc).each do |a|
         puts a.children.to_s
+      end
+    end
+
+    def report_non_conformant_pdf_links(parent_dir, html, html_doc)
+      select_pdf_links(parent_dir, html, html_doc).select do |a|
+        PDF_SIZE_RE !~ a.children.to_s.chomp
+      end.each do |a|
+        puts format("==The size is not indicated: %s", a.children.to_s)
       end
     end
   end
