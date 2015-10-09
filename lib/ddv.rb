@@ -257,10 +257,7 @@ List recursively all files/directories in a directory.") do |opt|
 
     def report_external_links(parent_dir, html, links)
       external_links = links.select {|a| external_url?(a["href"]) }
-      unless external_links.empty?
-        puts
-        puts "== External links in #{File.join(parent_dir, html)}:"
-      end
+      print_header(external_links, "External links", parent_dir, html)
       external_links.each do |a|
         puts format("  %s | %s", a.children.to_s, a["href"])
       end
@@ -269,15 +266,19 @@ List recursively all files/directories in a directory.") do |opt|
     def report_title(parent_dir, html, html_doc)
       titles = html_doc.xpath("//title")
       h1 = html_doc.xpath("//h1")
-      unless titles.empty?
-        puts
-        puts "== Title in #{File.join(parent_dir, html)}:"
-      end
+      print_header(titles, "Title", parent_dir, html)
       titles.each do |title|
         puts title.children
       end
       h1.each do |h1|
         puts h1
+      end
+    end
+
+    def print_header(items, label, parent_dir, html)
+      unless items.empty?
+        puts
+        puts "== #{label} in #{File.join(parent_dir, html)}:"
       end
     end
   end
