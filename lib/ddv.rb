@@ -174,8 +174,7 @@ List recursively all files/directories in a directory.") do |opt|
     def count_by_file_type(files)
       counter = Hash.new(0)
       files.each do |file|
-        m = /\.([^.]+)\Z/.match(file) # extract file extention
-        ext = m ? m[1] : "others"
+        ext = file.type || "others"
         counter[ext] += 1
       end
       counter
