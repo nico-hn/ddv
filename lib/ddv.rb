@@ -91,6 +91,10 @@ List recursively all files/directories in a directory.") do |opt|
     end
 
     alias to_str to_s
+
+    def size
+      File.size(@path)
+    end
   end
 
   class DirVisitor
