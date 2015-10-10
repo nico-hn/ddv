@@ -109,7 +109,7 @@ List recursively all files/directories in a directory.") do |opt|
     def tree(parent_dir, level=0)
       parent_dir = DirNode.new(parent_dir)
       @output.output_dir(parent_dir.basename, level, parent_dir.path)
-      nodes = Dir.entries(parent_dir) - [".", ".."]
+      nodes = parent_dir.entries
       dirs, files = nodes.partition {|n| dir?(parent_dir, n) }.map(&:sort)
       @output.output_files(files, level, parent_dir)
       dirs.each do |dir|
