@@ -83,9 +83,10 @@ List recursively all files/directories in a directory.") do |opt|
   end
 
   class FileNode
-    attr_reader :basename, :path
+    attr_reader :basename, :path, :directory
 
     def initialize(parent_dir, basename)
+      @directory = parent_dir
       @path = File.join(parent_dir, basename)
       @basename = basename
     end
