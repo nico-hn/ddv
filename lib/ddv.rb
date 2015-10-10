@@ -93,7 +93,7 @@ List recursively all files/directories in a directory.") do |opt|
     alias to_str to_s
 
     def size
-      File.size(@path)
+      @size ||= File.size(@path)
     end
   end
 
