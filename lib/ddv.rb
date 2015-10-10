@@ -130,6 +130,7 @@ List recursively all files/directories in a directory.") do |opt|
     end
 
     def output_files(files, level, parent_dir)
+      files = files.map {|file| FileNode.new(parent_dir, file) }
       if @max_detailed_files_num and files.size > @max_detailed_files_num
         output_files_summary(files)
       else
