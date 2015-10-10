@@ -196,10 +196,6 @@ List recursively all files/directories in a directory.") do |opt|
 
     private
 
-    def file_size(parent_dir, file)
-      File.size(File.join(parent_dir, file))
-    end
-
     def select_files(parent_dir, files)
       file_nodes = files.map {|file| FileNode.new(parent_dir, file) }
       smaller_removed = file_nodes.select {|f| f.size >= @minimum_size }
