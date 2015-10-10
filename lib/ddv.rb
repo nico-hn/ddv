@@ -76,6 +76,10 @@ List recursively all files/directories in a directory.") do |opt|
     end
 
     alias to_str to_s
+
+    def entries
+      Dir.entries(@path) - [".", ".."]
+    end
   end
 
   class FileNode
