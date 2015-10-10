@@ -189,8 +189,8 @@ List recursively all files/directories in a directory.") do |opt|
     def output_files(files, level, parent_dir)
       files_with_size = select_files(parent_dir, files)
       puts
-      files_with_size.each do |file, size|
-        output_file(file, level, size)
+      files_with_size.each do |file|
+        output_file(file, level)
       end
     end
 
@@ -201,10 +201,10 @@ List recursively all files/directories in a directory.") do |opt|
     end
 
     def select_files(parent_dir, files)
-      files_with_size = files.map {|file| [file, file_size(parent_dir, file)] }
-      smaller_removed = files_with_size.select {|f| f[1] >= @minimum_size }
+      file_nodes = files.map {|file| FileNode.new(parent_dir, file) }
+      smaller_removed = file_nodes.select {|f| f.size >= @minimum_size }
       if @maximum_size
-        smaller_removed.select {|f| f[1] <= @maximum_size }
+        smaller_removed.select {|f| f.size <= @maximum_size }
       else
         smaller_removed
       end
@@ -216,10 +216,10 @@ List recursively all files/directories in a directory.") do |opt|
       format("%.2f%s", size.to_f / @units[unit], unit)
     end
 
-    def output_file(file, level, size)
+    def output_file(file, level)
       print "  " * level + "  * "
       print file
-      puts " -> " + size_with_unit(size)
+      puts " -> " + size_with_unit(file.size)
     end
   end
 
