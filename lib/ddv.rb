@@ -83,12 +83,13 @@ List recursively all files/directories in a directory.") do |opt|
   end
 
   class FileNode
-    attr_reader :basename, :path, :directory
+    attr_reader :basename, :path, :directory, :type
 
     def initialize(parent_dir, basename)
       @directory = parent_dir
       @path = File.join(parent_dir, basename)
       @basename = basename
+      @type = extention(basename)
     end
 
     def to_s
@@ -99,6 +100,13 @@ List recursively all files/directories in a directory.") do |opt|
 
     def size
       @size ||= File.size(@path)
+    end
+
+    private
+
+    def extention(basename)
+      m = /\.([^.]+)\Z/.match(basename) # extract file extention
+      m[1] if m
     end
   end
 
