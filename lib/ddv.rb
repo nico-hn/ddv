@@ -63,6 +63,36 @@ List recursively all files/directories in a directory.") do |opt|
     end
   end
 
+  class DirNode
+    attr_reader :basename, :path
+
+    def initialize(path)
+      @path = path
+      @basename = File.basename(path)
+    end
+
+    def to_s
+      @path
+    end
+
+    alias to_str to_s
+  end
+
+  class FileNode
+    attr_reader :basename, :path
+
+    def initialize(parent_dir, basename)
+      @path = File.join(parent_dir, basename)
+      @basename = basename
+    end
+
+    def to_s
+      @basename
+    end
+
+    alias to_str to_s
+  end
+
   class DirVisitor
     def initialize(output=NodePrinter.new)
       @output = output
