@@ -248,6 +248,7 @@ List recursively all files/directories in a directory.") do |opt|
         report_non_conformant_pdf_links(pdf_links)
         report_external_links(parent_dir, html, html_doc.xpath("//a"))
         report_title(parent_dir, html, html_doc)
+        report_imgs(parent_dir, html, html_doc)
       end
     end
 
@@ -316,6 +317,15 @@ List recursively all files/directories in a directory.") do |opt|
       end
       h1.each do |h1|
         puts h1
+      end
+    end
+
+    def report_imgs(parent_dir, html, html_doc)
+      imgs = html_doc.xpath("//img")
+      print_header(imgs, "Images", parent_dir, html)
+      imgs.each do |img|
+        print "||" unless img["alt"]
+        puts img
       end
     end
 
