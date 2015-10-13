@@ -249,6 +249,7 @@ List recursively all files/directories in a directory.") do |opt|
         report_external_links(parent_dir, html, html_doc.xpath("//a"))
         report_title(parent_dir, html, html_doc)
         report_imgs(parent_dir, html, html_doc)
+        report_forms(parent_dir, html, html_doc)
       end
     end
 
@@ -326,6 +327,14 @@ List recursively all files/directories in a directory.") do |opt|
       imgs.each do |img|
         print "||" unless img["alt"]
         puts img
+      end
+    end
+
+    def report_forms(parent_dir, html, html_doc)
+      forms = html_doc.xpath("//form")
+      print_header(forms, "Forms", parent_dir, html)
+      forms.each do |form|
+        puts form
       end
     end
 
