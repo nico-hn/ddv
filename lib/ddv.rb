@@ -327,6 +327,7 @@ List recursively all files/directories in a directory.") do |opt|
       print_header(imgs, "Images", parent_dir, html)
       imgs.each do |img|
         print "||" unless img["alt"]
+        print "||? " if img["alt"] and img["alt"].empty?
         puts img
       end
     end
