@@ -251,6 +251,7 @@ List recursively all files/directories in a directory.") do |opt|
         report_imgs(parent_dir, html, html_doc)
         report_forms(parent_dir, html, html_doc)
         report_lang(parent_dir, html, html_doc)
+        report_possible_breadcrumb(parent_dir, html, html_doc)
       end
     end
 
@@ -349,6 +350,16 @@ List recursively all files/directories in a directory.") do |opt|
         else
           puts "|| The language for the content is not specified."
         end
+      end
+    end
+
+    def report_possible_breadcrumb(parent_dir, html, html_doc)
+      breads = html_doc.xpath("//*").select do |e|
+        /bread|pan.?kuzu/i =~ e["class"]
+      end
+      print_header(breads, "Possible breadcrumb", parent_dir, html)
+      breads.each do |b|
+        puts b
       end
     end
 
