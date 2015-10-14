@@ -375,6 +375,13 @@ List recursively all files/directories in a directory.") do |opt|
       end
     end
 
+    def each_element(parent_dir, html, html_doc,
+                     element_name, report_label)
+      elements = html_doc.xpath("//#{element_name}")
+      print_header(elements, report_label, parent_dir, html)
+      elements.each {|element| yield element }
+    end
+
     def print_header(items, label, parent_dir, html)
       unless items.empty?
         puts
