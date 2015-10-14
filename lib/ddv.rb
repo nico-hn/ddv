@@ -250,6 +250,7 @@ List recursively all files/directories in a directory.") do |opt|
         report_title(parent_dir, html, html_doc)
         report_imgs(parent_dir, html, html_doc)
         report_forms(parent_dir, html, html_doc)
+        report_lang(parent_dir, html, html_doc)
       end
     end
 
@@ -335,6 +336,18 @@ List recursively all files/directories in a directory.") do |opt|
       print_header(forms, "Forms", parent_dir, html)
       forms.each do |form|
         puts form
+      end
+    end
+
+    def report_lang(parent_dir, html, html_doc)
+      html_elm = html_doc.xpath("//html")
+      print_header(html_elm, "HTML", parent_dir, html)
+      html_elm.each do |h|
+        if lang = h["lang"]
+          puts "lang= #{lang}"
+        else
+          puts "|| The language for the content is not specified."
+        end
       end
     end
 
