@@ -237,6 +237,11 @@ List recursively all files/directories in a directory.") do |opt|
 
     def initialize(domain_name)
       @domain_name_re = compile_domain_name_re(domain_name)
+      sjis_numbers = encoding_dependent_chars(0x8740, 0x875d)
+      sjis_units = encoding_dependent_chars(0x875f, 0x8775)
+      sjis_symbols = encoding_dependent_chars(0x8780, 0x879c)
+      sjis_heisei = encoding_dependent_chars(0x877e, 0x877e)
+      @sjis_dependent_re = /[#{sjis_numbers+sjis_units+sjis_symbols+sjis_heisei}]/
     end
 
     def output_files(files, level, parent_dir)
@@ -253,6 +258,7 @@ List recursively all files/directories in a directory.") do |opt|
         report_lang(parent_dir, html, html_doc)
         report_possible_breadcrumb(parent_dir, html, html_doc)
         report_tables(parent_dir, html, html_doc)
+        report_sjis_dependent_chars(parent_dir, html)
       end
     end
 
@@ -372,6 +378,18 @@ List recursively all files/directories in a directory.") do |opt|
         end
         puts table
       end
+    end
+
+    def report_sjis_dependent_chars(parent_dir, html)
+      html_text = File.read(File.join(parent_dir, html))
+      dependent_chars = html_text.scan(@sjis_dependent_re)
+      unless dependent_chars.empty?
+        puts "|| SJIS dependent chars are used: #{dependent_chars.join(',')}"
+      end
+    end
+
+    def encoding_dependent_chars(start_code, end_code)
+      (start_code..end_code).to_a.pack("n*").force_encoding("Windows-31J").encode("UTF-8")
     end
 
     def each_element(parent_dir, html, html_doc,
