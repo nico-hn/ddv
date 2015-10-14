@@ -252,6 +252,7 @@ List recursively all files/directories in a directory.") do |opt|
         report_forms(parent_dir, html, html_doc)
         report_lang(parent_dir, html, html_doc)
         report_possible_breadcrumb(parent_dir, html, html_doc)
+        report_tables(parent_dir, html, html_doc)
       end
     end
 
@@ -360,6 +361,17 @@ List recursively all files/directories in a directory.") do |opt|
       print_header(breads, "Possible breadcrumb", parent_dir, html)
       breads.each do |b|
         puts b
+      end
+    end
+
+    def report_tables(parent_dir, html, html_doc)
+      tables = html_doc.xpath("//table")
+      print_header(tables, "Tables", parent_dir, html)
+      tables.each do |table|
+        if table.xpath("//caption").empty? and table["summary"].nil?
+          puts "|| There is no caption nor summary: "
+        end
+        puts table
       end
     end
 
