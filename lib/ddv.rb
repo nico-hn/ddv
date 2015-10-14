@@ -365,9 +365,8 @@ List recursively all files/directories in a directory.") do |opt|
     end
 
     def report_tables(parent_dir, html, html_doc)
-      tables = html_doc.xpath("//table")
-      print_header(tables, "Tables", parent_dir, html)
-      tables.each do |table|
+      each_element(parent_dir, html, html_doc,
+                   "table", "Tables") do |table|
         if table.xpath("//caption").empty? and table["summary"].nil?
           puts "|| There is no caption nor summary: "
         end
