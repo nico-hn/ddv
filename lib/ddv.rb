@@ -251,6 +251,7 @@ List recursively all files/directories in a directory.") do |opt|
         pdf_links = select_pdf_links(parent_dir, html, html_doc)
         report_pdf_links(pdf_links)
         report_non_conformant_pdf_links(pdf_links)
+        report_anchor_target(parent_dir, html, html_doc)
         report_external_links(parent_dir, html, html_doc.xpath("//a"))
         report_title(parent_dir, html, html_doc)
         report_imgs(parent_dir, html, html_doc)
@@ -316,6 +317,13 @@ List recursively all files/directories in a directory.") do |opt|
       print_header(external_links, "External links", parent_dir, html)
       external_links.each do |a|
         puts format("  %s | %s", a.children.to_s, a["href"])
+      end
+    end
+
+    def report_anchor_target(parent_dir, html, html_doc)
+      each_element(parent_dir, html, html_doc,
+                   "a", "Link with the target attribute") do |a|
+        puts a if a["target"]
       end
     end
 
