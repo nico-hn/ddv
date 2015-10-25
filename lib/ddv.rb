@@ -259,6 +259,7 @@ List recursively all files/directories in a directory.") do |opt|
         report_possible_breadcrumb(parent_dir, html, html_doc)
         report_tables(parent_dir, html, html_doc)
         report_sjis_dependent_chars(parent_dir, html)
+        report_all_links(parent_dir, html, html_doc)
       end
     end
 
@@ -377,6 +378,13 @@ List recursively all files/directories in a directory.") do |opt|
           puts "|| There is no caption nor summary: "
         end
         puts table
+      end
+    end
+
+    def report_all_links(parent_dir, html, html_doc)
+      each_element(parent_dir, html, html_doc,
+                   "a", "All links") do |a|
+        puts a.children.to_s
       end
     end
 
