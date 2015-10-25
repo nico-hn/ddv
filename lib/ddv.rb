@@ -241,7 +241,7 @@ List recursively all files/directories in a directory.") do |opt|
       sjis_units = encoding_dependent_chars(0x875f, 0x8775)
       sjis_symbols = encoding_dependent_chars(0x8780, 0x879c)
       sjis_heisei = encoding_dependent_chars(0x877e, 0x877e)
-      @sjis_dependent_re = /[#{sjis_numbers+sjis_units+sjis_symbols+sjis_heisei}]/
+      @sjis_dependent_re = /[#{sjis_numbers+sjis_units+sjis_symbols+sjis_heisei}]+/
     end
 
     def output_files(files, level, parent_dir)
@@ -383,6 +383,7 @@ List recursively all files/directories in a directory.") do |opt|
     def report_sjis_dependent_chars(parent_dir, html)
       html_text = File.read(File.join(parent_dir, html))
       dependent_chars = html_text.scan(@sjis_dependent_re)
+      print_header(dependent_chars, "SJIS dependent", parent_dir, html)
       unless dependent_chars.empty?
         puts "|| SJIS dependent chars are used: #{dependent_chars.join(',')}"
       end
