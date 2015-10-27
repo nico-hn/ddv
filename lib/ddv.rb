@@ -371,7 +371,7 @@ List recursively all files/directories in a directory.") do |opt|
 
     def report_possible_breadcrumb(parent_dir, html, html_doc)
       breads = html_doc.xpath("//*").select do |e|
-        /bread|pan.?kuzu/i =~ e["class"]
+        /nav|bread|pan.?kuzu/i =~ e["class"] or /^nav/i =~ e.name
       end
       print_header(breads, "Possible breadcrumb", parent_dir, html)
       breads.each do |b|
